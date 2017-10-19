@@ -1,4 +1,5 @@
 ![CHICK - hicken House Illumination Control boKs](https://raw.github.com/joshcam/CHICK/master/doc/images/Emojione_1F425.png)
+
 This repository contains 3D hardware designs, firmware and other documentation for CHICK. 
 
 ## Project Description
