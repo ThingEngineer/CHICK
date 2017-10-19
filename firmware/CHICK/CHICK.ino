@@ -1,10 +1,12 @@
 /*
   CHICK - Chicken House Illumination Control boKs
 
-  Simple 12 volt system powered, LED light controller to 
-  extend daylight hours in a chicken house promoting 
-  greater egg production.
-  More info: https://poultrykeeper.com/general-chickens/light-for-layers/
+  Simple (minimalist approach) daylight automatd 12 volt system 
+  powered, LED light controller. It's purpose is to extend 
+  daylight hours in a chicken house/coup thus promoting greater 
+  egg production. 
+  You can read more info about that here: 
+  https://poultrykeeper.com/general-chickens/light-for-layers/
 
   Functions:
   - Memorize current light level as the trigger on point.
