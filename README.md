@@ -2,7 +2,7 @@
 This repository contains 3D hardware designs, firmware and other documentation for CHICK. 
 
 ## Project Description
-CHICK [Chicken House Illumination Control boKs] is an open source simple (minimalist approach) daylight automatd 12 volt powered LED light controller. It's purpose is to extend daylight hours in a chicken house/coup thus promoting greater egg production. 
+CHICK [Chicken House Illumination Control boKs] is an open source, simple to use, minimalistic approach daylight automated 12 volt powered LED light controller. It's purpose is to extend daylight hours in a chicken house/coup thus promoting greater egg productionzd. 
 You can read more info about that here: https://poultrykeeper.com/general-chickens/light-for-layers/
 
 ## Open Source
