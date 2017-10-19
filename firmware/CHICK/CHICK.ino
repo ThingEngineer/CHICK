@@ -1,7 +1,7 @@
 /*
   CHICK - Chicken House Illumination Control boKs
 
-  Simple (minimalist approach) daylight automatd 12 volt system 
+  Simple (minimalistic approach) daylight automated 12 volt 
   powered, LED light controller. It's purpose is to extend 
   daylight hours in a chicken house/coup thus promoting greater 
   egg production. 
@@ -35,9 +35,21 @@
 // pin the Relay is connected to
 const int relayPin = 5;
 
-const int cdsInPin = A0;
+// pins the LEDs are connected to
+const int led1Pin = 6;    // Hour 1
+const int led2Pin = 7;    // Hour 2
+const int led3Pin = 8;    // Hour 3
+const int led4Pin = 9;    // Hour 4
+const int led5Pin = 10;   // Hour 5
 
-int sensorValue = 0;        // value read from the CDS sensor
+// pins the buttons are connected to
+const int manualButton = 4;     // Manual button
+const int hoursButton = 5;      // Hours button
+const int setButton = 6;        // Set button
+
+const int cdsInPin = 0;   // CDS light sensor
+
+int sensorValue = 0;      // value read from the CDS sensor
 
 
 void setup() {
