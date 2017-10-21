@@ -22,8 +22,8 @@
   * 5 LEDs connected from +5V to digital pins 6-10 indicate 
     the number of hours the main lighting LEDs will remain on
     after they are triggered on by the CDS sensor level event
-  * CDS
-  * Relay
+  * CDS Photocell
+  * Relay > DC-DC Buck Converter
 
  Created 18 Oct. 2017
  Modified 20 Oct. 2017
@@ -43,27 +43,73 @@ const int led4Pin = 9;    // Hour 4
 const int led5Pin = 10;   // Hour 5
 
 // pins the buttons are connected to
-const int manualButton = 4;     // Manual button
-const int hoursButton = 5;      // Hours button
-const int setButton = 6;        // Set button
+const int manualButtonPin = 2;     // Manual button
+const int hoursButtonPin = 3;      // Hours button
+const int setButtonPin = 4;        // Set button
 
-const int cdsInPin = 0;   // CDS light sensor
+const int cdsPin = 0;     // CDS light sensor
 
-int lightReading = 0;      // value read from the CDS/Photocell sensor
+int manualButtonState = 0;  // variable for reading the manual button status
+int hoursButtonState = 0;   // variable for reading the hours button status
+int setButtonState = 0;     // variable for reading the set button status
+int lightReading = 0;       // value read from the CDS/Photocell sensor
 
 void setup() {
   
   // initialize serial communications at 9600 bps:
-  Serial.begin(9600);
-  
+  //Serial.begin(9600);
+
+  // Set pin modes
+  pinMode(manualButtonPin, INPUT_PULLUP);
+  pinMode(hoursButtonPin, INPUT_PULLUP);
+  pinMode(setButtonPin, INPUT_PULLUP);
+  pinMode(led1Pin, OUTPUT);
+  pinMode(led2Pin, OUTPUT);
+  pinMode(led3Pin, OUTPUT);
+  pinMode(led4Pin, OUTPUT);
+  pinMode(led5Pin, OUTPUT);
   pinMode(relayPin, OUTPUT);
   
 }
 
 void loop() {
 
+  // Read current button states
+  manualButtonState = digitalRead(manualButtonPin);
+  hoursButtonState = digitalRead(hoursButtonPin);
+  setButtonState = digitalRead(setButtonPin);
+
+  // Debouce
+  //TODO
+
+  if (manualButtonState == LOW)
+  {
+    digitalWrite(led1Pin, LOW);
+    delay(1000);
+  }
+
+  if (hoursButtonState == LOW)
+  {
+    digitalWrite(led2Pin, LOW);
+    delay(1000);
+  }
+
+  if (setButtonState == LOW)
+  {
+    digitalWrite(led3Pin, LOW);
+    digitalWrite(led4Pin, LOW);
+    digitalWrite(led5Pin, LOW);
+    delay(1000);
+  }
+
+  digitalWrite(led1Pin, HIGH);
+  digitalWrite(led2Pin, HIGH);
+  digitalWrite(led3Pin, HIGH);
+  digitalWrite(led4Pin, HIGH);
+  digitalWrite(led5Pin, HIGH);
+
   // read the analog in value of the CDS sensor:
-  lightReading = analogRead(cdsInPin);
+  lightReading = analogRead(cdsPin);
 
   if (lightReading > 1000)
   {
@@ -75,9 +121,8 @@ void loop() {
   }
 
   // print the results to the serial monitor/plotter:
-  Serial.print("sensor = ");
-  Serial.print(lightReading);
-  Serial.print("\n");
+  //Serial.print("sensor = ");
+  //Serial.println(lightReading);
 
   delay(100);
 }
