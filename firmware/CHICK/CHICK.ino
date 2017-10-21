@@ -1,12 +1,15 @@
 /*
   CHICK - Chicken House Illumination Control boKs
 
-  Simple (minimalistic approach) daylight automated 12 volt 
-  powered, LED light controller. It's purpose is to extend 
-  daylight hours in a chicken house/coup thus promoting greater 
-  egg production. 
+  CHICK is an open source, simple to use, minimalistic approach 
+  daylight automated 12 volt powered LED light controller. 
+  Its purpose is to extend daylight hours in a chicken house/coup, 
+  thus promoting greater egg production. 
   You can read more info about that here: 
   https://poultrykeeper.com/general-chickens/light-for-layers/
+
+  GitHub Project: https://github.com/joshcam/CHICK
+  Thingiverse files for CHICK: https://www.thingiverse.com/thing:2595492
 
   Functions:
   - Memorize current light level as the trigger on point.
@@ -23,14 +26,11 @@
   * Relay
 
  Created 18 Oct. 2017
- Modified 19 Oct. 2017
+ Modified 20 Oct. 2017
  By Josh Campbell
 
- GitHub - 
-
- This example code is in the public domain.
+ This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
  */
-
 
 // pin the Relay is connected to
 const int relayPin = 5;
@@ -49,8 +49,7 @@ const int setButton = 6;        // Set button
 
 const int cdsInPin = 0;   // CDS light sensor
 
-int sensorValue = 0;      // value read from the CDS sensor
-
+int lightReading = 0;      // value read from the CDS/Photocell sensor
 
 void setup() {
   
@@ -61,19 +60,24 @@ void setup() {
   
 }
 
-
 void loop() {
 
   // read the analog in value of the CDS sensor:
-  sensorValue = analogRead(cdsInPin);
-  // print the results to the serial monitor:
-  Serial.print("sensor = ");
-  Serial.print(sensorValue);
-  Serial.print("\n");
-  
-  //digitalWrite(relayPin, HIGH);   
-  //delay(30000);                       
-  //digitalWrite(relayPin, LOW);   
-  delay(2000);                      
+  lightReading = analogRead(cdsInPin);
 
+  if (lightReading > 1000)
+  {
+    digitalWrite(relayPin, LOW);
+  }
+  else
+  {
+    digitalWrite(relayPin, HIGH); 
+  }
+
+  // print the results to the serial monitor/plotter:
+  Serial.print("sensor = ");
+  Serial.print(lightReading);
+  Serial.print("\n");
+
+  delay(100);
 }
