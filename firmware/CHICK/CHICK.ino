@@ -69,6 +69,15 @@ void setup() {
   pinMode(led4Pin, OUTPUT);
   pinMode(led5Pin, OUTPUT);
   pinMode(relayPin, OUTPUT);
+
+  // Ensure LEDs are off (active LOW)
+  digitalWrite(led1Pin, HIGH);
+  digitalWrite(led2Pin, HIGH);
+  digitalWrite(led3Pin, HIGH);
+  digitalWrite(led4Pin, HIGH);
+  digitalWrite(led5Pin, HIGH);
+  // Ensure relay is off (active HIGH)
+  digitalWrite(relayPin, LOW);
   
 }
 
