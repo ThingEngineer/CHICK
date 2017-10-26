@@ -43,9 +43,9 @@ const int led4Pin = 9;    // Hour 4
 const int led5Pin = 10;   // Hour 5
 
 // pins the buttons are connected to
-const int manualButtonPin = 2;     // Manual button
+const int setButtonPin = 2;        // Set button
 const int hoursButtonPin = 3;      // Hours button
-const int setButtonPin = 4;        // Set button
+const int manualButtonPin = 4;     // Manual button
 
 const int cdsPin = 0;     // CDS light sensor
 
