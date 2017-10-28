@@ -32,6 +32,8 @@
  This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
  */
 
+#include <EEPROM.h>       // library to access the EEPROM read write functions
+
 // pin the Relay is connected to
 const int relayPin = 5;   // LED control relay
 
@@ -47,23 +49,30 @@ const int setButtonPin = 2;        // Set button
 const int hoursButtonPin = 3;      // Hours button
 const int manualButtonPin = 4;     // Manual button
 
-const int cdsPin = 0;       // CDS light sensor
+const int cdsPin = 0;           // CDS light sensor
 
-int manualButtonState = 0;  // variable for reading the manual button status
-int hoursButtonState = 0;   // variable for reading the hours button status
-int setButtonState = 0;     // variable for reading the set button status
-int lightReading = 0;       // value read from the CDS/Photocell sensor
+int manualButtonState = 0;      // variable for reading the manual button status
+int hoursButtonState = 0;       // variable for reading the hours button status
+int setButtonState = 0;         // variable for reading the set button status
+int initialLightReading = 0;    // the initial value read from the CDS/Photocell sensor
+int lightReading = 0;           // value read from the CDS/Photocell sensor
+const int lightDeltaMax = 10;   // maximum deviation from initial and current light level readings
+const int triggerLevelAddr = 0; // address where the saved trigger light level is saved in EEPROM
+int triggerLevel = 0;           // level at which the LEDs are triggered ON
 
-int currentButtonPressed = 0; // the current button pressed
-int lastButtonPressed = 0;    // the last button pressed
-int buttonCheck = 0;          // button press checksum
-bool buttonValid = false;     // valid button press flag
+int currentButtonPressed = 0;   // the current button pressed
+int lastButtonPressed = 0;      // the last button pressed
+int buttonCheck = 0;            // button press checksum
+bool buttonValid = false;       // valid button press flag
 
 unsigned long lastDebounceTime = 0;   // the last time the output pin was toggled
-unsigned long debounceDelay = 500;     // the debounce time delay
+unsigned long debounceDelay = 500;    // the debounce time delay
 
 
 void setup() {
+
+  // load light trigger level from EEPROM
+  int triggerLevel = EEPROMReadInt(triggerLevelAddr);
   
   // initialize serial communications at 9600 bps:
   Serial.begin(9600);
@@ -192,23 +201,38 @@ void loop() {
 void saveLightLevel()
 {
   // sample light level over time and show LEDs to indicate progress
+  sampleLight:
+  initialLightReading = analogRead(cdsPin);
+  delay(500);
   digitalWrite(led1Pin, LOW);
+  lightReading = analogRead(cdsPin);
+  if ( levelDeltaCheck(initialLightReading, lightReading) ) goto restart;
   delay(500);
   if (digitalRead(setButtonPin)) return;
   digitalWrite(led2Pin, LOW);
+  lightReading = analogRead(cdsPin);
+  if ( levelDeltaCheck(initialLightReading, lightReading) ) goto restart;
   delay(500);
   if (digitalRead(setButtonPin)) return;
   digitalWrite(led3Pin, LOW);
+  lightReading = analogRead(cdsPin);
+  if ( levelDeltaCheck(initialLightReading, lightReading) ) goto restart;
   delay(500);
   if (digitalRead(setButtonPin)) return;
   digitalWrite(led4Pin, LOW);
+  lightReading = analogRead(cdsPin);
+  if ( levelDeltaCheck(initialLightReading, lightReading) ) goto restart;
   delay(500);
   if (digitalRead(setButtonPin)) return;
   digitalWrite(led5Pin, LOW);
+  lightReading = analogRead(cdsPin);
+  if ( levelDeltaCheck(initialLightReading, lightReading) ) goto restart;
   delay(500);
+  lightReading = analogRead(cdsPin);
+  if ( levelDeltaCheck(initialLightReading, lightReading) ) goto restart;
 
   // save this value as the ON triger level
-  TODO
+  EEPROMWriteInt(triggerLevelAddr, lightReading);
   
   // flash LEDs to indicate the new trigger level was saved
   digitalWrite(led1Pin, HIGH);
@@ -224,4 +248,44 @@ void saveLightLevel()
   digitalWrite(led5Pin, LOW);
   delay(300);
   return;
+
+  restart:
+  // Max delta range error, clear LEDs and restart sampling
+  digitalWrite(led1Pin, HIGH);
+  digitalWrite(led2Pin, HIGH);
+  digitalWrite(led3Pin, HIGH);
+  digitalWrite(led4Pin, HIGH);
+  digitalWrite(led5Pin, HIGH);
+  goto sampleLight;
 }
+
+int levelDeltaCheck(int p_initialLightReading, int p_lightReading)
+{
+  if ( (initialLightReading - lightDeltaMax > lightReading) || (initialLightReading + lightDeltaMax < lightReading) )
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
+}
+
+// this function will write a 2 byte integer to the eeprom at the specified address and address + 1
+void EEPROMWriteInt(int p_address, int p_value)
+     {
+     byte lowByte = ((p_value >> 0) & 0xFF);
+     byte highByte = ((p_value >> 8) & 0xFF);
+
+     EEPROM.write(p_address, lowByte);
+     EEPROM.write(p_address + 1, highByte);
+     }
+
+// this function will read a 2 byte integer from the eeprom at the specified address and address + 1
+unsigned int EEPROMReadInt(int p_address)
+     {
+     byte lowByte = EEPROM.read(p_address);
+     byte highByte = EEPROM.read(p_address + 1);
+
+     return ((lowByte << 0) & 0xFF) + ((highByte << 8) & 0xFF00);
+     }
