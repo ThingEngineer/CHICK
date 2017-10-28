@@ -72,7 +72,7 @@ unsigned long debounceDelay = 500;    // the debounce time delay
 void setup() {
 
   // load light trigger level from EEPROM
-  int triggerLevel = EEPROMReadInt(triggerLevelAddr);
+  triggerLevel = EEPROMReadInt(triggerLevelAddr);
   
   // initialize serial communications at 9600 bps:
   Serial.begin(9600);
@@ -177,24 +177,13 @@ void loop() {
   // END Set Button Press
   // ****************************************************
   
-//  // read the analog in value of the CDS sensor:
-//  lightReading = analogRead(cdsPin);
-//
-//  // cds test code
-//  if (lightReading > 950)   // if sensor level is above 950
-//  {
-//    digitalWrite(relayPin, LOW);  // relay off
-//    digitalWrite(led5Pin, HIGH);  // led off
-//  }
-//  else  // if sensor level is 950 or less
-//  {
-//    digitalWrite(relayPin, HIGH); // relay on
-//    digitalWrite(led5Pin, LOW);   // led on
-//  }
-//
-//  // print cds value to serial monitor/plotter:
-//  Serial.print("sensor = ");
-//  Serial.println(lightReading);
+  lightReading = analogRead(cdsPin);
+
+  // cds test code
+  {
+    digitalWrite(relayPin, LOW);  // relay off
+  }
+  else  // if sensor level is at or below the triggerLevel
 //  delay(200);
 }
 
@@ -230,17 +219,20 @@ void saveLightLevel()
   delay(500);
   lightReading = analogRead(cdsPin);
   if ( levelDeltaCheck(initialLightReading, lightReading) ) goto restart;
+  triggerLevel = lightReading;
 
   // save this value as the ON triger level
-  EEPROMWriteInt(triggerLevelAddr, lightReading);
+  EEPROMWriteInt(triggerLevelAddr, triggerLevel);
   
   // flash LEDs to indicate the new trigger level was saved
+  digitalWrite(relayPin, HIGH); // relay on
   digitalWrite(led1Pin, HIGH);
   digitalWrite(led2Pin, HIGH);
   digitalWrite(led3Pin, HIGH);
   digitalWrite(led4Pin, HIGH);
   digitalWrite(led5Pin, HIGH);
   delay(300);
+  digitalWrite(relayPin, LOW); // relay off
   digitalWrite(led1Pin, LOW);
   digitalWrite(led2Pin, LOW);
   digitalWrite(led3Pin, LOW);
