@@ -163,7 +163,7 @@ void loop() {
   // Set Button Press
   if (buttonValid == true && currentButtonPressed == 3)
   {
-    digitalWrite(led3Pin, LOW);
+    saveLightLevel();
   }
   // END Set Button Press
   // ****************************************************
@@ -189,4 +189,39 @@ void loop() {
 //  delay(200);
 }
 
+void saveLightLevel()
+{
+  // sample light level over time and show LEDs to indicate progress
+  digitalWrite(led1Pin, LOW);
+  delay(500);
+  if (digitalRead(setButtonPin)) return;
+  digitalWrite(led2Pin, LOW);
+  delay(500);
+  if (digitalRead(setButtonPin)) return;
+  digitalWrite(led3Pin, LOW);
+  delay(500);
+  if (digitalRead(setButtonPin)) return;
+  digitalWrite(led4Pin, LOW);
+  delay(500);
+  if (digitalRead(setButtonPin)) return;
+  digitalWrite(led5Pin, LOW);
+  delay(500);
+
+  // save this value as the ON triger level
+  TODO
+  
+  // flash LEDs to indicate the new trigger level was saved
+  digitalWrite(led1Pin, HIGH);
+  digitalWrite(led2Pin, HIGH);
+  digitalWrite(led3Pin, HIGH);
+  digitalWrite(led4Pin, HIGH);
+  digitalWrite(led5Pin, HIGH);
+  delay(300);
+  digitalWrite(led1Pin, LOW);
+  digitalWrite(led2Pin, LOW);
+  digitalWrite(led3Pin, LOW);
+  digitalWrite(led4Pin, LOW);
+  digitalWrite(led5Pin, LOW);
+  delay(300);
+  return;
 }
