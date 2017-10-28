@@ -26,7 +26,7 @@
   * Relay > DC-DC Buck Converter
 
  Created 18 Oct. 2017
- Modified 26 Oct. 2017
+ Modified 28 Oct. 2017
  By Josh Campbell
 
  This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
@@ -97,6 +97,7 @@ void loop() {
   hoursButtonState = digitalRead(hoursButtonPin);
   setButtonState = digitalRead(setButtonPin);
 
+  // ****************************************************
   // Button debouncing and validation
   buttonCheck = manualButtonState + hoursButtonState + setButtonState;  // allows ignoring pressing multiple buttons at once
   
@@ -138,27 +139,34 @@ void loop() {
     digitalWrite(led5Pin, HIGH);
   }
   // END Button debouncing and validation
-  
+  // ****************************************************
+
+  // ****************************************************
   // Manual Button Press
   if (buttonValid == true && currentButtonPressed == 1)
   {
     digitalWrite(led1Pin, LOW);
   }
   // END Manual Button Press
+  // ****************************************************
 
+  // ****************************************************
   // Hours Button Press
   if (buttonValid == true && currentButtonPressed == 2)
   {
     digitalWrite(led2Pin, LOW);
   }
   // END Hours Button Press
+  // ****************************************************
 
+  // ****************************************************
   // Set Button Press
   if (buttonValid == true && currentButtonPressed == 3)
   {
     digitalWrite(led3Pin, LOW);
   }
   // END Set Button Press
+  // ****************************************************
   
   // read the analog in value of the CDS sensor:
   lightReading = analogRead(cdsPin);
