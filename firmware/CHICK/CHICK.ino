@@ -168,23 +168,25 @@ void loop() {
   // END Set Button Press
   // ****************************************************
   
-  // read the analog in value of the CDS sensor:
-  lightReading = analogRead(cdsPin);
+//  // read the analog in value of the CDS sensor:
+//  lightReading = analogRead(cdsPin);
+//
+//  // cds test code
+//  if (lightReading > 950)   // if sensor level is above 950
+//  {
+//    digitalWrite(relayPin, LOW);  // relay off
+//    digitalWrite(led5Pin, HIGH);  // led off
+//  }
+//  else  // if sensor level is 950 or less
+//  {
+//    digitalWrite(relayPin, HIGH); // relay on
+//    digitalWrite(led5Pin, LOW);   // led on
+//  }
+//
+//  // print cds value to serial monitor/plotter:
+//  Serial.print("sensor = ");
+//  Serial.println(lightReading);
+//  delay(200);
+}
 
-  // cds test code
-  if (lightReading > 950)   // if sensor level is above 950
-  {
-    digitalWrite(relayPin, LOW);  // relay off
-    digitalWrite(led5Pin, HIGH);  // led off
-  }
-  else  // if sensor level is 950 or less
-  {
-    digitalWrite(relayPin, HIGH); // relay on
-    digitalWrite(led5Pin, LOW);   // led on
-  }
-
-  // print cds value to serial monitor/plotter:
-  //Serial.print("sensor = ");
-  //Serial.println(lightReading);
-  //delay(200);
 }
