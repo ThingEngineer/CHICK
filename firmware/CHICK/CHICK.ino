@@ -75,7 +75,7 @@ void setup() {
   triggerLevel = EEPROMReadInt(triggerLevelAddr);
   
   // initialize serial communications at 9600 bps:
-  Serial.begin(9600);
+  //Serial.begin(9600);
 
   // Set pin modes
   pinMode(manualButtonPin, INPUT_PULLUP);
@@ -177,13 +177,19 @@ void loop() {
   // END Set Button Press
   // ****************************************************
   
+  // read the analog in value of the CDS sensor:
   lightReading = analogRead(cdsPin);
 
   // cds test code
+  if (lightReading > triggerLevel + 5)   // if sensor level is above triggerLevel
   {
     digitalWrite(relayPin, LOW);  // relay off
   }
   else  // if sensor level is at or below the triggerLevel
+  {
+    digitalWrite(relayPin, HIGH); // relay on
+  }
+//  Serial.println(lightReading); // print cds value to serial plotter:
 //  delay(200);
 }
 
