@@ -247,8 +247,9 @@ void saveLightLevel()
   delay(300);
   return;
 
-  restart:
   // Max delta range error, clear LEDs and restart sampling
+  restart:
+  delay(25);   // small delay before clearing to help indicate what is happening
   digitalWrite(led1Pin, HIGH);
   digitalWrite(led2Pin, HIGH);
   digitalWrite(led3Pin, HIGH);
