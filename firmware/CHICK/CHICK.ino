@@ -96,7 +96,21 @@ void setup() {
   digitalWrite(led5Pin, HIGH);
   // Ensure relay is off (active HIGH)
   digitalWrite(relayPin, LOW);
-  
+
+  // initialize timer1 
+  noInterrupts();       // disable all interrupts
+  TCCR1A = 0;           // set entire TCCR1A register to 0
+  TCCR1B = 0;           // same for TCCR1B
+  TCNT1  = 0;           // initialize counter value to 0
+  // set compare match register for 1 Hz increments
+  OCR1A = 62499; // = 16000000 / (256 * 1) - 1 (must be <65536)
+  // turn on CTC mode
+  TCCR1B |= (1 << WGM12);
+  // Set CS12, CS11 and CS10 bits for 256 prescaler
+  TCCR1B |= (1 << CS12) | (0 << CS11) | (0 << CS10);
+  // enable timer compare interrupt
+  TIMSK1 |= (1 << OCIE1A);
+  interrupts();         // enable all interrupts
 }
 
 void loop() {
@@ -191,6 +205,12 @@ void loop() {
 //  }
 //  Serial.println(lightReading); // print cds value to serial plotter:
 //  delay(200);
+}
+
+ISR(TIMER1_COMPA_vect)        // interrupt service routine for compare register 1A vector
+{
+  TCNT1 = 0;      // reset timer value
+  digitalWrite(led1Pin, digitalRead(led1Pin) ^ 1);
 }
 
 void saveLightLevel()
