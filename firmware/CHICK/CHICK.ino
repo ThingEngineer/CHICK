@@ -181,14 +181,14 @@ void loop() {
   lightReading = analogRead(cdsPin);
 
   // cds test code
-  if (lightReading > triggerLevel + 5)   // if sensor level is above triggerLevel
-  {
-    digitalWrite(relayPin, LOW);  // relay off
-  }
-  else if (lightReading < triggerLevel - 5) // if sensor level is at or below the triggerLevel
-  {
-    digitalWrite(relayPin, HIGH); // relay on
-  }
+//  if (lightReading > triggerLevel + 5)   // if sensor level is above triggerLevel
+//  {
+//    digitalWrite(relayPin, LOW);  // relay off
+//  }
+//  else if (lightReading < triggerLevel - 5) // if sensor level is at or below the triggerLevel
+//  {
+//    digitalWrite(relayPin, HIGH); // relay on
+//  }
 //  Serial.println(lightReading); // print cds value to serial plotter:
 //  delay(200);
 }
