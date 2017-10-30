@@ -185,7 +185,7 @@ void loop() {
   {
     digitalWrite(relayPin, LOW);  // relay off
   }
-  else  // if sensor level is at or below the triggerLevel
+  else if (lightReading < triggerLevel - 5) // if sensor level is at or below the triggerLevel
   {
     digitalWrite(relayPin, HIGH); // relay on
   }
