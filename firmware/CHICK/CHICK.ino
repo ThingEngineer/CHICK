@@ -69,10 +69,16 @@ unsigned long lastDebounceTime = 0;   // the last time the output pin was toggle
 unsigned long debounceDelay = 300;    // the debounce time delay
 
 
+const shutOffDelayAddr = 2;
+byte shutOffDelay = 0;
+
 void setup() {
 
   // load light trigger level from EEPROM
   triggerLevel = EEPROMReadInt(triggerLevelAddr);
+  
+  // load shut off delay from EEPROM
+  shutOffDelay = EEPROMReadInt(shutOffDelayAddr);
   
   // initialize serial communications at 9600 bps:
   //Serial.begin(9600);
@@ -178,6 +184,11 @@ void loop() {
   if (buttonValid == true && currentButtonPressed == 2)
   {
     digitalWrite(led2Pin, LOW);
+    
+    shutOffDelay = 1;
+    
+    // save this value as the shut off delay
+    EEPROMWriteInt(shutOffDelayAddr, shutOffDelay);
   }
   // END Hours Button Press
   // ****************************************************
