@@ -26,7 +26,7 @@
   * Relay > DC-DC Buck Converter
 
  Created 18 Oct. 2017
- Modified 28 Oct. 2017
+ Modified 30 Oct. 2017
  By Josh Campbell
 
  This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
@@ -258,16 +258,10 @@ void saveLightLevel()
   goto sampleLight;
 }
 
-int levelDeltaCheck(int p_initialLightReading, int p_lightReading)
+bool levelDeltaCheck(int p_initialLightReading, int p_lightReading)
 {
-  if ( (initialLightReading - lightDeltaMax > lightReading) || (initialLightReading + lightDeltaMax < lightReading) )
-  {
-    return 1;
-  }
-  else
-  {
-    return 0;
-  }
+  if ( (initialLightReading - lightDeltaMax > lightReading) || (initialLightReading + lightDeltaMax < lightReading) ) return true;
+  return false;
 }
 
 // this function will write a 2 byte integer to the eeprom at the specified address and address + 1
