@@ -154,7 +154,7 @@ void loop() {
   // Manual Button Press
   if (buttonValid == true && currentButtonPressed == 1)
   {
-    digitalWrite(led1Pin, LOW);
+    digitalWrite(relayPin, digitalRead(relayPin) ^ 1);    // toggle the relay pin (does not interfere with timer on/off state)
   }
   // END Manual Button Press
   // ****************************************************
