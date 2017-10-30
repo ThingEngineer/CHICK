@@ -66,7 +66,7 @@ int buttonCheck = 0;            // button press checksum
 bool buttonValid = false;       // valid button press flag
 
 unsigned long lastDebounceTime = 0;   // the last time the output pin was toggled
-unsigned long debounceDelay = 500;    // the debounce time delay
+unsigned long debounceDelay = 300;    // the debounce time delay
 
 
 void setup() {
