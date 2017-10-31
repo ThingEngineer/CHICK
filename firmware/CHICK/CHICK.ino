@@ -68,6 +68,7 @@ bool buttonValid = false;       // valid button press flag
 unsigned long lastDebounceTime = 0;   // the last time the output pin was toggled
 unsigned long debounceDelay = 300;    // the debounce time delay
 
+long lastTime = 0;
 byte secondsCounter = 0;
 byte minutesCounter = 0;
 byte hoursCounter = 0;
@@ -108,21 +109,6 @@ void setup() {
   // Ensure relay is off (active HIGH)
   digitalWrite(relayPin, LOW);
 
-  // initialize timer1 
-  noInterrupts();       // disable all interrupts
-  TCCR1A = 0;           // set entire TCCR1A register to 0
-  TCCR1B = 0;           // same for TCCR1B
-  TCNT1  = 0;           // initialize counter value to 0
-  // set compare match register for 1 Hz increments
-  OCR1A = 62499; // = 16000000 / (256 * 1) - 1 (must be <65536)
-  // turn on CTC mode
-  TCCR1B |= (1 << WGM12);
-  // Set CS12, CS11 and CS10 bits for 256 prescaler
-  TCCR1B |= (1 << CS12) | (0 << CS11) | (0 << CS10);
-  // enable timer compare interrupt
-  TIMSK1 |= (1 << OCIE1A);
-  interrupts();         // enable all interrupts
-}
 
 void loop() {
 
@@ -206,6 +192,22 @@ void loop() {
   }
   // END Set Button Press
   // ****************************************************
+
+  if(millis()-lastTime > 2000)
+  {
+    minutesCounter++;     // increment minutes counter
+    minuteFlag == true;   // set minute flag
+    digitalWrite(led1Pin, digitalRead(led1Pin) ^ 1);  // test LED toggle
+    lastTime = millis();  // save current millisecond as lastTime
+  }
+  
+  if(minutesCounter > 2)
+  {
+    hoursCounter++;       // increment minutes counter
+    hourFlag == true;     // set hour flag
+    digitalWrite(led5Pin, digitalRead(led5Pin) ^ 1);  // test LED toggle
+    minutesCounter = 0;          // reset minutes counter
+  }
   
 
   
@@ -222,28 +224,6 @@ void loop() {
 //  }
 //  Serial.println(lightReading); // print cds value to serial plotter:
 //  delay(200);
-}
-
-ISR(TIMER1_COMPA_vect)        // interrupt service routine for compare register 1A vector
-{
-  TCNT1 = 0;          // reset timer value
-
-  secondsCounter++;   // increment seconds counter
-  if (secondsCounter == 60)
-  {
-    secondsCounter = 0;   // reset seconds counter
-    minuteFlag = true;     // set minute flag
-    minutesCounter++;     // increment minutes counter
-    
-    if (minutesCounter == 60)
-    {
-      minutesCounter = 0;   // reset minutes counter
-      hourFlag = true;      // set hour flag
-      hoursCounter++;       // increment minutes counter
-    }
-  }
-  
-  digitalWrite(led1Pin, digitalRead(led1Pin) ^ 1);
 }
 
 void saveLightLevel()
