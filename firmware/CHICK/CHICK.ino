@@ -211,7 +211,7 @@ void loop() {
   
 
   // cds test code
-//  lightReading = analogRead(cdsPin);  // read the analog in value of the CDS sensor:
+//  lightReading = analogRead(cdsPin);  // read the analog in value of the CDS sensor
 //  if (lightReading > triggerLevel + 5)   // if sensor level is above triggerLevel
 //  {
 //    digitalWrite(relayPin, LOW);  // relay off
@@ -232,7 +232,7 @@ ISR(TIMER1_COMPA_vect)        // interrupt service routine for compare register 
   if (secondsCounter == 60)
   {
     secondsCounter = 0;   // reset seconds counter
-    minuteFlag = true     // set minute flag
+    minuteFlag = true;     // set minute flag
     minutesCounter++;     // increment minutes counter
     
     if (minutesCounter == 60)
