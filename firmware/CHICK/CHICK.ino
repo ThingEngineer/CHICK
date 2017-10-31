@@ -69,7 +69,7 @@ unsigned long lastDebounceTime = 0;   // the last time the output pin was toggle
 unsigned long debounceDelay = 300;    // the debounce time delay
 
 
-const shutOffDelayAddr = 2;
+const byte shutOffDelayAddr = 2;
 byte shutOffDelay = 0;
 
 void setup() {
