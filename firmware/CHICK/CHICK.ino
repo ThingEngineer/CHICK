@@ -26,7 +26,7 @@
   * Relay > DC-DC Buck Converter
 
  Created 18 Oct. 2017
- Modified 30 Oct. 2017
+ Modified 31 Oct. 2017
  By Josh Campbell
 
  This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
@@ -68,6 +68,11 @@ bool buttonValid = false;       // valid button press flag
 unsigned long lastDebounceTime = 0;   // the last time the output pin was toggled
 unsigned long debounceDelay = 300;    // the debounce time delay
 
+byte secondsCounter = 0;
+byte minutesCounter = 0;
+byte hoursCounter = 0;
+bool minuteFlag = false;
+bool hourFlag = false;
 
 const byte shutOffDelayAddr = 2;
 byte shutOffDelay = 0;
@@ -204,7 +209,6 @@ void loop() {
   
 
   
-  
 
   // cds test code
 //  lightReading = analogRead(cdsPin);  // read the analog in value of the CDS sensor:
@@ -222,7 +226,23 @@ void loop() {
 
 ISR(TIMER1_COMPA_vect)        // interrupt service routine for compare register 1A vector
 {
-  TCNT1 = 0;      // reset timer value
+  TCNT1 = 0;          // reset timer value
+
+  secondsCounter++;   // increment seconds counter
+  if (secondsCounter == 60)
+  {
+    secondsCounter = 0;   // reset seconds counter
+    minuteFlag = true     // set minute flag
+    minutesCounter++;     // increment minutes counter
+    
+    if (minutesCounter == 60)
+    {
+      minutesCounter = 0;   // reset minutes counter
+      hourFlag = true;      // set hour flag
+      hoursCounter++;       // increment minutes counter
+    }
+  }
+  
   digitalWrite(led1Pin, digitalRead(led1Pin) ^ 1);
 }
 
