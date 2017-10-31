@@ -197,7 +197,7 @@ void loop() {
   if(millis()-lastTime > 2000)
   {
     minutesCounter++;     // increment minutes counter
-    minuteFlag == true;   // set minute flag
+    minuteFlag = true;    // set minute flag
     digitalWrite(led1Pin, digitalRead(led1Pin) ^ 1);  // test LED toggle
     lastTime = millis();  // save current millisecond as lastTime
   }
@@ -205,7 +205,7 @@ void loop() {
   if(minutesCounter > 2)
   {
     hoursCounter++;       // increment minutes counter
-    hourFlag == true;     // set hour flag
+    hourFlag = true;      // set hour flag
     digitalWrite(led5Pin, digitalRead(led5Pin) ^ 1);  // test LED toggle
     minutesCounter = 0;          // reset minutes counter
   }
