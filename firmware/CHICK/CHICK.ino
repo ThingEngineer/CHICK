@@ -79,8 +79,8 @@ byte hoursCounter = 0;          // hours counter
 bool minuteFlag = false;        // minute flag - triggered once each minute
 bool hourFlag = false;          // hour flag - triggered once each hour
 
-const byte shutOffDelayAddr = 2;
-byte shutOffDelay = 0;
+const byte shutOffDelayAddr = 2;// address where the saved shut off delay is saved in EEPROM
+byte shutOffDelay = 0;          // number of hours that the LED will remain on before being shut off
 
 void setup() {
 
