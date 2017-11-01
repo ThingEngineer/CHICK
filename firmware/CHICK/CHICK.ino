@@ -25,8 +25,8 @@
   * CDS Photocell
   * Relay > DC-DC Buck Converter
 
- Created 18 Oct. 2017
- Modified 31 Oct. 2017
+ Created 18 October 2017
+ Modified 1 November 2017
  By Josh Campbell
 
  This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
@@ -59,6 +59,11 @@ int lightReading = 0;           // value read from the CDS/Photocell sensor
 const int lightDeltaMax = 10;   // maximum deviation from initial and current light level readings
 const int triggerLevelAddr = 0; // address where the saved trigger light level is saved in EEPROM
 int triggerLevel = 0;           // level at which the LEDs are triggered ON
+byte triggerCounter = 0;        // number of valid light level triggers (current reading is less than or equal to triggerLevel)
+const byte triggerCount = 5;    // number of valid light level triggers required to activate LEDs
+byte shutOffDelayCounter = 0;   // count down timer to shut LEDs off
+bool LEDstate = false;          // flag to indicate LED state (true = ON, false = OFF)
+bool nightFlag = false;         // flag set at night that must be reset at dawn before LEDs can be retriggered
 
 int currentButtonPressed = 0;   // the current button pressed
 int lastButtonPressed = 0;      // the last button pressed
@@ -68,12 +73,11 @@ bool buttonValid = false;       // valid button press flag
 unsigned long lastDebounceTime = 0;   // the last time the output pin was toggled
 unsigned long debounceDelay = 300;    // the debounce time delay
 
-long lastTime = 0;
-byte secondsCounter = 0;
-byte minutesCounter = 0;
-byte hoursCounter = 0;
-bool minuteFlag = false;
-bool hourFlag = false;
+long lastTime = 0;              // last saved millisecond count
+byte minutesCounter = 0;        // minutes counter
+byte hoursCounter = 0;          // hours counter
+bool minuteFlag = false;        // minute flag - triggered once each minute
+bool hourFlag = false;          // hour flag - triggered once each hour
 
 const byte shutOffDelayAddr = 2;
 byte shutOffDelay = 0;
@@ -108,7 +112,6 @@ void setup() {
   digitalWrite(led5Pin, HIGH);
   // Ensure relay is off (active HIGH)
   digitalWrite(relayPin, LOW);
-
 }
 
 void loop() {
@@ -209,8 +212,86 @@ void loop() {
     digitalWrite(led5Pin, digitalRead(led5Pin) ^ 1);  // test LED toggle
     minutesCounter = 0;          // reset minutes counter
   }
-  
 
+  // Code run on the minute
+  if (minuteFlag == true)
+  {
+    if (LEDstate == false)                  // only run this code if the LEDstate is false
+    {
+      lightReading = analogRead(cdsPin);    // read the analog in value of the CDS sensor
+
+      if (lightReading < triggerLevel && nightFlag == false)      // if current reading is less than or equal to triggerLevel and it is no longer nightime
+      {
+        triggerCounter++;                   // increment triggerCounter
+        if (triggerCounter == 1) digitalWrite(led1Pin, LOW);      // LED indication of trigger counter stage
+        if (triggerCounter == 2) digitalWrite(led2Pin, LOW);
+        if (triggerCounter == 3) digitalWrite(led3Pin, LOW);
+        if (triggerCounter == 4) digitalWrite(led4Pin, LOW);
+      }
+      else if (nightFlag == false)
+      {
+        triggerCounter = 0;                 // or reset triggerCounter
+        refreshLEDs();
+      }
+
+      if (triggerCounter == triggerCount && nightFlag == false)   // if triggerCounter hits the threshold at it is not nightime activate LEDs and countdown timer
+      {
+        digitalWrite(relayPin, HIGH);       // turn LED relay on
+        nightFlag = true;                   // set nighttime flag
+        LEDstate = true;                    // indicate LED relay is on
+        shutOffDelayCounter = shutOffDelay; // load shutOffDelay to the shutOffDelayCounter
+        refreshLEDs();                      // turn the corresponding LED to indicate hours remaning in the countdown timer
+        minutesCounter = 0;                 // reset minutes
+        hoursCounter = 0;                   //   and hours to ensure a fresh counter start
+        hourFlag = false;                   // clear just incase an hour was triggered this minute
+      }
+
+      if (lightReading > triggerLevel && nightFlag == true)
+      {
+        if (triggerCounter == 0)            // LED indication of trigger counter stage
+        {
+          digitalWrite(led1Pin, LOW);
+          digitalWrite(led2Pin, LOW);
+          digitalWrite(led3Pin, LOW);
+          digitalWrite(led4Pin, LOW);
+        }
+        triggerCounter++;                   // increment triggerCounter
+        if (triggerCounter == 2) digitalWrite(led4Pin, HIGH);     // LED indication of trigger counter stage
+        if (triggerCounter == 3) digitalWrite(led3Pin, HIGH);
+        if (triggerCounter == 4) digitalWrite(led2Pin, HIGH);
+        if (triggerCounter == 5) digitalWrite(led1Pin, HIGH);
+      }
+      else if (nightFlag == true)
+      {
+        triggerCounter = 0;                 // or reset triggerCounter
+        refreshLEDs();
+      }
+
+      if (triggerCounter == triggerCount && nightFlag == true)   // if triggerCounter hits the threshold at it is nightime
+      {
+        nightFlag = false;                  // reset nighttime flag
+      }
+      
+    }
+    minuteFlag = false;                     // reset minute flag
+  }
+
+  // Code run on the hour
+  if (hourFlag == true)
+  {
+    if (LEDstate == true)                   // only run this code if the LEDstate is true
+    {
+      shutOffDelayCounter--;                // decrement the shutOffDelayCounter
+      if (shutOffDelayCounter == 0)
+      {
+        digitalWrite(relayPin, LOW);        // turn LED relay off
+        LEDstate = false;                   // indicate LED relay is off
+      }
+      refreshLEDs();                        // turn the corresponding LED to indicate hours remaning in the countdown timer
+    }
+
+    hourFlag = false;  // reset hour flag
+  }
   
 
   // cds test code
@@ -290,6 +371,28 @@ void saveLightLevel()
   digitalWrite(led4Pin, HIGH);
   digitalWrite(led5Pin, HIGH);
   goto sampleLight;
+}
+
+// This function first clears the LEDs turns on the corresponding LED to indicate hours remaning in the countdown timer
+void refreshLEDs()
+{
+  // clear LEDs
+  digitalWrite(led1Pin, HIGH);
+  digitalWrite(led2Pin, HIGH);
+  digitalWrite(led3Pin, HIGH);
+  digitalWrite(led4Pin, HIGH);
+  digitalWrite(led5Pin, HIGH);
+
+  if (LEDstate == true)    // turn on hour indicator LED only if LEDstate is true (on)
+  {
+    if (shutOffDelayCounter == 5) digitalWrite(led5Pin, LOW);  // turn on LED #5
+    if (shutOffDelayCounter == 4) digitalWrite(led4Pin, LOW);  // turn on LED #4
+    if (shutOffDelayCounter == 3) digitalWrite(led3Pin, LOW);  // turn on LED #3
+    if (shutOffDelayCounter == 2) digitalWrite(led2Pin, LOW);  // turn on LED #2
+    if (shutOffDelayCounter == 1) digitalWrite(led1Pin, LOW);  // turn on LED #1
+  }
+  
+  return;
 }
 
 bool levelDeltaCheck(int p_initialLightReading, int p_lightReading)
