@@ -154,13 +154,8 @@ void loop() {
     currentButtonPressed = 0;   // clear current button pressed
     lastButtonPressed = 0;      // clear last button pressed
     buttonValid = false;        // clear button validation flag
-  
-    // clear LEDs
-    digitalWrite(led1Pin, HIGH);
-    digitalWrite(led2Pin, HIGH);
-    digitalWrite(led3Pin, HIGH);
-    digitalWrite(led4Pin, HIGH);
-    digitalWrite(led5Pin, HIGH);
+
+    refreshLEDs();              // clear LEDs and turn the corresponding LED to indicate hours remaning in the countdown timer
   }
   // END Button debouncing and validation
   // ****************************************************
