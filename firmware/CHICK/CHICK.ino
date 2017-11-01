@@ -197,20 +197,18 @@ void loop() {
   // END Set Button Press
   // ****************************************************
 
-  if(millis()-lastTime > 2000)
+  if(millis()-lastTime > 2000)  // if 60 seconds have elasped
   {
     minutesCounter++;     // increment minutes counter
     minuteFlag = true;    // set minute flag
-    digitalWrite(led1Pin, digitalRead(led1Pin) ^ 1);  // test LED toggle
     lastTime = millis();  // save current millisecond as lastTime
   }
   
-  if(minutesCounter > 2)
+  if(minutesCounter > 2)  // if 60 minutes have elapsed
   {
-    hoursCounter++;       // increment minutes counter
+    hoursCounter++;       // increment hours counter
     hourFlag = true;      // set hour flag
-    digitalWrite(led5Pin, digitalRead(led5Pin) ^ 1);  // test LED toggle
-    minutesCounter = 0;          // reset minutes counter
+    minutesCounter = 0;   // reset minutes counter
   }
 
   // Code run on the minute
