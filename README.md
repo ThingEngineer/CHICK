@@ -1,10 +1,12 @@
-![CHICK - hicken House Illumination Control boKs](https://raw.github.com/joshcam/CHICK/master/doc/images/Emojione_1F425.png)
-
-This repository contains 3D hardware designs, firmware and other documentation for CHICK. 
+<img atl="CHICK - hicken House Illumination Control boKs" src="https://raw.github.com/joshcam/CHICK/master/doc/images/Emojione_1F425.png" width="100">This repository contains 3D hardware designs, firmware and other documentation for CHICK.
 
 ## Project Description
-CHICK [Chicken House Illumination Control boKs] is an open source, simple to use, minimalistic approach daylight automated 12 volt powered LED light controller. Its purpose is to extend daylight hours in a chicken house/coup thus promoting greater egg production. 
+CHICK [Chicken House Illumination Control boKs] is an open source, simple to use, minimalistic approach daylight automated 12 volt powered LED light controller. Its purpose is to extend daylight hours in a chicken house/coup thus promoting greater egg production.
 You can read more info about that here: https://poultrykeeper.com/general-chickens/light-for-layers/
+
+I wanted a simple controller without the need to set timers, adjusted time for DST, and change time with the seasons.
+
+<img atl="Assymbled CHICK" src="https://raw.github.com/joshcam/CHICK/master/doc/images/inside_assymbled_01a.jpg">
 
 Thingiverse files for CHICK: https://www.thingiverse.com/thing:2595492
 
