@@ -287,7 +287,8 @@ void loop() {
 
       lightReading = analogRead(cdsPin);    // read the analog in value of the CDS sensor
       // if we think it is night time but the light level is above the trigger level then speed up the timer to shut the light off sooner
-      if (nightFlag == true && lightReading > triggerLevel) minutesCounter = 1;
+      // the first hour will be normal but each hour afer that will only be two minutes
+      if (nightFlag == true && lightReading > triggerLevel) minutesCounter = 58;
     }
 
     hourFlag = false;  // reset hour flag
