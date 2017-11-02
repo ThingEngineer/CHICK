@@ -295,20 +295,7 @@ void loop() {
 
     hourFlag = false;  // reset hour flag
   }
-  
 
-  // cds test code
-//  lightReading = analogRead(cdsPin);  // read the analog in value of the CDS sensor
-//  if (lightReading > triggerLevel + 5)   // if sensor level is above triggerLevel
-//  {
-//    digitalWrite(relayPin, LOW);  // relay off
-//  }
-//  else if (lightReading < triggerLevel - 5) // if sensor level is at or below the triggerLevel
-//  {
-//    digitalWrite(relayPin, HIGH); // relay on
-//  }
-//  Serial.println(lightReading); // print cds value to serial plotter:
-//  delay(200);
 }
 
 void saveLightLevel()
