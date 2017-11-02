@@ -173,11 +173,17 @@ void loop() {
   // Hours Button Press
   if (buttonValid == true && currentButtonPressed == 2)
   {
-    digitalWrite(led2Pin, LOW);
+    shutOffDelay++;
+    if (shutOffDelay >= 6) shutOffDelay = 1;
     
-    shutOffDelay = 1;
+    if (shutOffDelay == 1) digitalWrite(led1Pin, LOW);      // LED indication of shutOffDelay selection in hours
+    if (shutOffDelay == 2) digitalWrite(led2Pin, LOW);
+    if (shutOffDelay == 3) digitalWrite(led3Pin, LOW);
+    if (shutOffDelay == 4) digitalWrite(led4Pin, LOW);
+    if (shutOffDelay == 5) digitalWrite(led5Pin, LOW);
+    delay(50);  // short delay for inidcator LED
     
-    // save this value as the shut off delay
+    // save this value as the new shut off delay
     EEPROMWriteInt(shutOffDelayAddr, shutOffDelay);
   }
   // END Hours Button Press
