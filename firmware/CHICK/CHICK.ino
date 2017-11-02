@@ -89,9 +89,6 @@ void setup() {
   
   // load shut off delay from EEPROM
   shutOffDelay = EEPROMReadInt(shutOffDelayAddr);
-  
-  // initialize serial communications at 9600 bps:
-  //Serial.begin(9600);
 
   // Set pin modes
   pinMode(manualButtonPin, INPUT_PULLUP);
