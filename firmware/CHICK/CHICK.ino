@@ -227,7 +227,7 @@ void loop() {
         if (triggerCounter == 3) digitalWrite(led3Pin, LOW);
         if (triggerCounter == 4) digitalWrite(led4Pin, LOW);
       }
-      else if (nightFlag == false)
+      else if (lightReading > triggerLevel &&  nightFlag == false)
       {
         triggerCounter = 0;                 // or reset triggerCounter
         refreshLEDs();
@@ -260,13 +260,13 @@ void loop() {
         if (triggerCounter == 4) digitalWrite(led2Pin, HIGH);
         if (triggerCounter == 5) digitalWrite(led1Pin, HIGH);
       }
-      else if (nightFlag == true)
+      else if (lightReading < triggerLevel && nightFlag == true)
       {
         triggerCounter = 0;                 // or reset triggerCounter
         refreshLEDs();
       }
 
-      if (triggerCounter == triggerCount && nightFlag == true)   // if triggerCounter hits the threshold at it is nightime
+      if (triggerCounter == triggerCount && nightFlag == true)   // if triggerCounter hits the threshold and it is nightime
       {
         nightFlag = false;                  // reset nighttime flag
       }
