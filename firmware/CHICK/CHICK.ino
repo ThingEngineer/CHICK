@@ -287,6 +287,10 @@ void loop() {
         LEDstate = false;                   // indicate LED relay is off
       }
       refreshLEDs();                        // turn the corresponding LED to indicate hours remaning in the countdown timer
+
+      lightReading = analogRead(cdsPin);    // read the analog in value of the CDS sensor
+      // if we think it is night time but the light level is above the trigger level then speed up the timer to shut the light off sooner
+      if (nightFlag == true && lightReading > triggerLevel) minutesCounter = 1;
     }
 
     hourFlag = false;  // reset hour flag
