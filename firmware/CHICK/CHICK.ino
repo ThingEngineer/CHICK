@@ -195,14 +195,14 @@ void loop() {
   // END Set Button Press
   // ****************************************************
 
-  if(millis()-lastTime > 2000)  // if 60 seconds have elasped
+  if(millis()-lastTime > 60000)  // if 60 seconds have elasped
   {
     minutesCounter++;     // increment minutes counter
     minuteFlag = true;    // set minute flag
     lastTime = millis();  // save current millisecond as lastTime
   }
   
-  if(minutesCounter > 2)  // if 60 minutes have elapsed
+  if(minutesCounter > 60)  // if 60 minutes have elapsed
   {
     hoursCounter++;       // increment hours counter
     hourFlag = true;      // set hour flag
