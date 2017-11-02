@@ -26,8 +26,10 @@
   * Relay > DC-DC Buck Converter
 
  Created 18 October 2017
- Modified 1 November 2017
+ Modified 2 November 2017
  By Josh Campbell
+
+ v1.0 - 11/02/2017
 
  This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
  */
