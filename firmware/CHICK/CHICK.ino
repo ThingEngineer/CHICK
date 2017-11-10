@@ -26,7 +26,7 @@
   * Relay > DC-DC Buck Converter
 
  Created 18 October 2017
- Modified 2 November 2017
+ Modified 10 November 2017
  By Josh Campbell
 
  v1.0 - 11/02/2017
@@ -35,6 +35,7 @@
  */
 
 #include <EEPROM.h>       // library to access the EEPROM read write functions
+#include <avr/wdt.h>      // library to access watchdog functions
 
 // pin the Relay is connected to
 const int relayPin = 5;   // LED control relay
@@ -111,9 +112,13 @@ void setup() {
   digitalWrite(led5Pin, HIGH);
   // Ensure relay is off (active HIGH)
   digitalWrite(relayPin, LOW);
+
+  // Emable watchdog timer with 8 second timeout
+  wdt_enable(WDTO_8S);
 }
 
 void loop() {
+  wdt_reset();    // reset the watchdog timer
 
   // Read current button states
   manualButtonState = digitalRead(manualButtonPin);
@@ -302,6 +307,7 @@ void saveLightLevel()
 {
   // sample light level over time and show LEDs to indicate progress
   sampleLight:
+  wdt_reset();    // reset the watchdog timer
   initialLightReading = analogRead(cdsPin);
   delay(500);
   digitalWrite(led1Pin, LOW);
