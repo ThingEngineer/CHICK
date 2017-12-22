@@ -8,7 +8,7 @@
   You can read more info about that here: 
   https://poultrykeeper.com/general-chickens/light-for-layers/
 
-  GitHub Project: https://github.com/joshcam/CHICK
+  GitHub Project: https://github.com/ThingEngineer/CHICK
   Thingiverse files for CHICK: https://www.thingiverse.com/thing:2595492
 
   Functions:
